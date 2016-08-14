@@ -3,24 +3,29 @@
 namespace core;
 
 /**
- * Class ClassLoader
- * @package core
+ * クラスのオートロードを制御するcoreクラス<br>
  *
- * 名前空間はディレクトリ階層に対応するように定める
+ * 名前空間はディレクトリ階層に対応するように定める<br>
+ * @package core
  */
 class ClassLoader
 {
 
     /**
-     * @var string フレームワークのルートディレクトリ
-     * TODO:これは後に定数設定用のファイルに移す(定数として)
+     * フレームワークのルートディレクトリ
+     *
+     * @var string
+     * TODO: これは後に定数設定用のファイルに移す(定数として)
      */
     private $framework_root_dir;
 
     /**
-     * @var string[] 名前空間と"これに対応するディレクトリ"までのパスの対応関係<br>
+     * 名前空間と名前空間に対応するディレクトリまでのパスの対応関係<br>
+     *
      * Foo\Bar => /some/where は 名前空間Foo\Bar が /some/where/以下に存在する、
      * つまりディレクトリ階層の /some/where/Foo/Bar に対応することを表す
+     *
+     * @var string[]
      */
     private $ns2paths;
 
@@ -33,9 +38,10 @@ class ClassLoader
     }
 
     /**
-     * 名前空間に対応するパスを登録する
+     * 名前空間とこれに対応するディレクトリまでのパスを登録する
+     *
      * @param string $namespace 名前空間
-     * @param string $path "名前空間に対応するディレクトリ"までのパス
+     * @param string $path 名前空間に対応するディレクトリまでのパス
      */
     public function addNameSpace(string $namespace, string $path)
     {
@@ -44,7 +50,9 @@ class ClassLoader
 
     /**
      * $framework_root_dir以下に名前空間を登録する
-     * つまり $namespace => $framework_root_dir の対応を$ns2pathsに登録する
+     *
+     * $namespace => $framework_root_dir の対応を$ns2pathsに登録する
+     *
      * @param string $namespace 名前空間
      */
     public function addFrameworkNameSpace(string $namespace)
@@ -54,7 +62,9 @@ class ClassLoader
 
     /**
      * 指定されたクラスをロードする<br>
+     *
      * $classにて指定されるクラス名は修飾の有無を問わない
+     *
      * @param string $class ロードするクラス名
      * @return bool ロードの成否
      */
@@ -79,8 +89,10 @@ class ClassLoader
 
     /**
      * $namespaceにある$classをロードする<br>
-     * なお、$namespaceは$ns2pathsにて対応するパスが事前に登録されている必要がある<br>
-     * また$classにて指定されるクラス名は非修飾名でなければならない
+     *
+     * $namespaceは$ns2pathsにて対応するパスが事前に登録されている必要がある<br>
+     * また、$classにて指定されるクラス名は非修飾名でなければならない
+     *
      * @param string $namespace $classの属する名前空間
      * @param string $class ロードするクラス名
      * @return bool ロードの成否

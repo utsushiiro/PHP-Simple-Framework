@@ -3,13 +3,15 @@
 namespace core;
 
 /**
- * Class Request
+ * リクエスト情報を制御するcoreクラス<br>
+ *
  * @package core
  */
 class Request
 {
     /**
      * リクエストのメソッドがPOSTであるかどうか判定する
+     *
      * @return bool
      */
     public function isPost() : bool
@@ -23,6 +25,7 @@ class Request
 
     /**
      * $nameで指定されたGETパラメタの値をバリデーションにかけてから返す
+     *
      * @param string $name パラメタ名
      * @param mixed $default 値が設定されてなかった場合の返り値
      * @return null|string
@@ -38,6 +41,7 @@ class Request
 
     /**
      * $nameで指定されたPOSTパラメタの値をバリデーションにかけてから返す
+     *
      * @param string $name パラメタ名
      * @param mixed $default 値が設定されてなかった場合の返り値
      * @return null|string
@@ -53,7 +57,8 @@ class Request
 
 
     /**
-     * リクエストがHTTPSを用いてのものであるかの判定
+     * リクエストがHTTPSを用いてのものであるかを判定する
+     *
      * @return string
      */
     public function isSSL() : string
@@ -67,7 +72,9 @@ class Request
 
     /**
      * リクエストを受けたサーバのホスト名を取得する<br>
-     * リクエストヘッダにHostヘッダがない場合はApache側で設定されている値を用いる
+     *
+     * リクエストヘッダにHostヘッダがない場合はApache側で設定されている値を用いる。
+     *
      * @return string
      */
     public function getHost() : string
@@ -81,6 +88,7 @@ class Request
 
     /**
      * リクエストされたURIのうちホスト部以降の値を取得する
+     *
      * @return string
      */
     public function getRequestUri() : string
@@ -90,14 +98,16 @@ class Request
 
     /**
      * ベースURIを取得する<br>
-     * ベースURIはフロントコントローラに続くパスインフォを取り出すために使用される
+     *
+     * ベースURIはフロントコントローラに続くパスインフォを取り出すために使用される。
      * <pre>
-     * ベースURIの抽出は以下の2つの場合にわけられる
+     * ベースURIの抽出は以下の2つの場合にわけられる。
      * 1: フロントコントローラがURIに含まれる場合
      *  "/some/where/FrontController[/any]" => "/some/where/FrontController"
      * 2: フロントコントローラが省略された場合
      *  "/some/where[/any] => /some/where"
      * </pre>
+     *
      * @return string
      */
     public function getBaseUri() : string
@@ -118,9 +128,11 @@ class Request
 
     /**
      * パスインフォを取得する<br>
-     * パスインフォはリクエストURIにおけるベースURIに続く部分である
+     *
+     * パスインフォはリクエストURIにおけるベースURIに続く部分である。
      * つまり、"/some/where[/FrontController][/path[/info[/...]]]"における、
-     * "[/path[/info[/...]]]"の部分を指す
+     * "[/path[/info[/...]]]"の部分を指す。
+     *
      * @return string
      */
     public function getPathInfo() : string
