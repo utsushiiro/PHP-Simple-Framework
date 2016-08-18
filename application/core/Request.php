@@ -27,10 +27,10 @@ class Request
      * $nameで指定されたGETパラメタの値をバリデーションにかけてから返す
      *
      * @param string $name パラメタ名
-     * @param mixed $default 値が設定されてなかった場合の返り値
-     * @return null|string
+     * @param string $default 値が設定されてなかった場合の返り値
+     * @return string
      */
-    public function getGetParam(string $name, $default = null) : string
+    public function getGetParam(string $name, string $default = ''): string
     {
         if (isset($_GET[$name])):
             return (string)filter_input(INPUT_GET, $name);
@@ -43,10 +43,10 @@ class Request
      * $nameで指定されたPOSTパラメタの値をバリデーションにかけてから返す
      *
      * @param string $name パラメタ名
-     * @param mixed $default 値が設定されてなかった場合の返り値
-     * @return null|string
+     * @param string $default 値が設定されてなかった場合の返り値
+     * @return string
      */
-    public function getPostParam(string $name, $default = null) :string
+    public function getPostParam(string $name, string $default = ''): string
     {
         if (isset($_POST[$name])):
             return (string)filter_input(INPUT_POST, $name);
@@ -55,13 +55,12 @@ class Request
         endif;
     }
 
-
     /**
      * リクエストがHTTPSを用いてのものであるかを判定する
      *
-     * @return string
+     * @return bool
      */
-    public function isSSL() : string
+    public function isSSL(): bool
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'):
             return true;
@@ -71,13 +70,13 @@ class Request
     }
 
     /**
-     * リクエストを受けたサーバのホスト名を取得する<br>
+     * リクエストを受けたサーバのホスト名を取得する
      *
      * リクエストヘッダにHostヘッダがない場合はApache側で設定されている値を用いる。
      *
      * @return string
      */
-    public function getHost() : string
+    public function getHost(): string
     {
         if (!empty($_SERVER['HTTP_HOST'])):
             return $_SERVER['HTTP_HOST'];
@@ -91,7 +90,7 @@ class Request
      *
      * @return string
      */
-    public function getRequestUri() : string
+    public function getRequestUri(): string
     {
         return $_SERVER['REQUEST_URI'];
     }
@@ -110,7 +109,7 @@ class Request
      *
      * @return string
      */
-    public function getBaseUri() : string
+    public function getBaseUri(): string
     {
         $script_name = $_SERVER['SCRIPT_NAME'];
         $request_uri = $this->getRequestUri();
@@ -123,7 +122,7 @@ class Request
             return rtrim(dirname($script_name), '/');
         endif;
 
-        return null;
+        return '';
     }
 
     /**
@@ -135,7 +134,7 @@ class Request
      *
      * @return string
      */
-    public function getPathInfo() : string
+    public function getPathInfo(): string
     {
         $base_url = $this->getBaseUri();
         $request_uri = $this->getRequestUri();

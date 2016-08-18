@@ -1,4 +1,7 @@
 <?php
+
+require_once "../bootstrap.php";
+
 $obj = new \core\Request();
 ?>
 
@@ -9,25 +12,27 @@ $obj = new \core\Request();
     <title>Requestクラステスト</title>
 </head>
 <body>
-  <pre>
-        <?php
-            echo "isPost:<br>";
-            var_dump($obj->isPost());
-            echo "<hr>" . "getGet:<br>";
-            var_dump($obj->getGetParam('get', 'default'));
-            echo "<hr>" . "getPost:<br>";
-            var_dump($obj->getPostParam('post', 'default'));
-            echo "<hr>" . "getHost:<br>";
-            var_dump($obj->getHost());
-            echo "<hr>" . "getRequestUri:<br>";
-            var_dump($obj->getRequestUri());
-            echo "<hr>" . "getBaseUri:<br>";
-            var_dump($obj->getBaseUri());
-            echo "<hr>" . "getPathInfo():<br>";
-            var_dump($obj->getPathInfo());
-            echo "<hr>";
-        ?>
+
+<pre>
+<?php
+echo "isPost:<br>";
+var_dump($obj->isPost());
+echo "<hr>" . "getGetParam:<br>";
+var_dump($obj->getGetParam('get', 'default'));
+echo "<hr>" . "getPostParam:<br>";
+var_dump($obj->getPostParam('post', 'default'));
+echo "<hr>" . "getHost:<br>";
+var_dump($obj->getHost());
+echo "<hr>" . "getRequestUri:<br>";
+var_dump($obj->getRequestUri());
+echo "<hr>" . "getBaseUri:<br>";
+var_dump($obj->getBaseUri());
+echo "<hr>" . "getPathInfo():<br>";
+var_dump($obj->getPathInfo());
+echo "<hr>";
+?>
 </pre>
+
   <p>Get送信</p>
   <form action="" method="get">
       <input type="text" name="get">
