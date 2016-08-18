@@ -109,7 +109,7 @@ class Router
      * 対応するルーティングパラメタにマッチングにより得られた動的パラメタの情報を加えた配列を返す。
      *
      * @param string $path_info
-     * @return array|null
+     * @return array|null ルーティングパラメタ
      */
     public function resolve(string $path_info)
     {

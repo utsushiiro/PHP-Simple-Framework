@@ -44,6 +44,8 @@ class DbManager
     public function __construct()
     {
         $this->connections = [];
+        $this->repo2cons = [];
+        $this->repositories = [];
     }
 
     /**
@@ -165,6 +167,3 @@ class DbManager
         return $this->repositories[$repo_name];
     }
 }
-
-$a = new DbManager();
-$a->connect("a", array('dsn' => 'a', 'user'=>'haru'));
