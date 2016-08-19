@@ -57,3 +57,8 @@ $router->dump_routes();
 $path_info = '/user/114/edit/514';
 $routing_params = $router->resolve($path_info);
 var_dump($routing_params);
+
+// 一致するパスインフォパターンがない場合の例外送出テスト
+echo '----- resolve()からのRouteNotFoundException ------', PHP_EOL;
+$path_info = '/unknown';
+$routing_params = $router->resolve($path_info);

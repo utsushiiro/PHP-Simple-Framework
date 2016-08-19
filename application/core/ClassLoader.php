@@ -1,6 +1,7 @@
 <?php
 
 namespace core;
+use core\exceptions\ClassNotFoundException;
 
 /**
  * クラスのオートロードを制御するcoreクラス<br>
@@ -63,12 +64,13 @@ class ClassLoader
     /**
      * 指定されたクラスをロードする<br>
      *
-     * $classにて指定されるクラス名は修飾の有無を問わない
+     * $classにて指定されるクラス名は修飾の有無を問わない。
+     * 指定されたクラスが存在しない場合は　{@link ClassNotFoundException} を送出する。
      *
      * @param string $class ロードするクラス名
-     * @return bool ロードの成否
+     * @throws ClassNotFoundException
      */
-    private function loadQualifiedClass(string $class) : bool
+    private function loadQualifiedClass(string $class)
     {
         // クラス名の最初の\を取り除く(いらないかも)
         $class = ltrim($class, '\\');
@@ -84,7 +86,9 @@ class ClassLoader
             $res = $this->loadClass('', $class);
         endif;
 
-        return $res;
+        if (!$res):
+            throw new ClassNotFoundException("Class '$class' not found");
+        endif;
     }
 
     /**
