@@ -87,7 +87,7 @@ class ClassLoader
         endif;
 
         if (!$res):
-            throw new ClassNotFoundException("Class '$class' not found");
+            throw new ClassNotFoundException($class, "Class '$class' not found");
         endif;
     }
 

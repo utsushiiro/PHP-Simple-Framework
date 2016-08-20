@@ -3,7 +3,8 @@
 namespace psf\core\exceptions;
 
 /**
- * 一致するRouteがなかった場合に発生する例外
+ * 指定されたパスインフォに一致するパスインフォパターンを持つ {@link Route} が
+ * {@link Router} になかったことを通知する。
  *
  * @package psf\core\exceptions
  */

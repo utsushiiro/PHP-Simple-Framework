@@ -3,10 +3,14 @@
 namespace psf\core;
 
 use psf\core\exceptions\ClassNotFoundException;
+use psf\core\exceptions\HttpNotFoundException;
 use psf\core\exceptions\RouteNotFoundException;
 
 /**
  * アプリケーション全体の流れを制御するcoreクラス
+ *
+ * まず、Applicationをインスタンス化し、幾つかのスタートアップルーチンを起動する。
+ * その後 {@link Application::run} を呼び出すことでリクエストを処理してレスポンスを返す。
  *
  * @package psf\core
  */
@@ -100,6 +104,10 @@ abstract class Application
 
     /**
      * リクエストに対する処理を行いレスポンスを返す
+     *
+     * まずルーティング処理を行い、ルーティングパラメタを取得する。
+     * その後、指定されたコントローラをインスタンス化して指定されたアクションを呼び出させる。
+     * レスポンスはアクション内にて設定されるため、アクションの呼出し後にレスポンスを送信する。
      */
     public function run()
     {
@@ -116,7 +124,7 @@ abstract class Application
 
         try {
             $this->dispatchController($controller_name, $action_name, $routing_params);
-        } catch (ClassNotFoundException $e) {
+        } catch (HttpNotFoundException $e) {
             $this->render404page($e);
         }
 
@@ -126,14 +134,24 @@ abstract class Application
     /**
      * 指定されたコントローラのアクションを呼び出す
      *
-     * @param string $controller_name
-     * @param string $action_name
+     * @param string $controller_name 起動するコントローラ名
+     * @param string $action_name 起動するアクション名
      * @param array $params
+     * @throws HttpNotFoundException
      */
     public function dispatchController(string $controller_name, string $action_name, $params = [])
     {
-        $controller_class = ucfirst($controller_name) . 'Controller';
-        $controller = new $controller_class($this);
+        // 指定されたコントローラのインスタンス化を行う
+        $controller_class_name = ucfirst($controller_name) . 'Controller';
+        $controller = null;
+        try {
+            $controller = new $controller_class_name($this);
+        }catch (ClassNotFoundException $e){
+            $class_name = $e->getClassName();
+            throw new HttpNotFoundException("Controller '$class_name' not found.");
+        }
+
+        // 指定されたアクションを呼び出して結果をレスポンスに設定する
         $content = $controller->dispatchAction($action_name, $params);
         $this->response->setContent($content);
     }
