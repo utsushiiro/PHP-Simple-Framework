@@ -1,8 +1,8 @@
 <?php
 
-require_once "../bootstrap.php";
+require_once "../../bootstrap.php";
 
-$obj = new \core\Request();
+$obj = new \psf\core\Request();
 ?>
 
 <!DOCTYPE html>

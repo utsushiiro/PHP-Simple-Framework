@@ -1,11 +1,11 @@
 <?php
 
-namespace core;
+namespace psf\core;
 
 /**
  * リクエスト情報を制御するcoreクラス<br>
  *
- * @package core
+ * @package psf\core
  */
 class Request
 {

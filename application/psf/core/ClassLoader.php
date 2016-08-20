@@ -1,13 +1,13 @@
 <?php
 
-namespace core;
-use core\exceptions\ClassNotFoundException;
+namespace psf\core;
+use psf\core\exceptions\ClassNotFoundException;
 
 /**
  * クラスのオートロードを制御するcoreクラス<br>
  *
  * 名前空間はディレクトリ階層に対応するように定める<br>
- * @package core
+ * @package psf\core
  */
 class ClassLoader
 {
@@ -35,7 +35,7 @@ class ClassLoader
     {
         spl_autoload_register(array($this, 'loadQualifiedClass'));
         $this->ns2paths = [];
-        $this->framework_root_dir = dirname(__DIR__);
+        $this->framework_root_dir = dirname(__DIR__, 2);
     }
 
     /**

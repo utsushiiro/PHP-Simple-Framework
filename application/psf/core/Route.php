@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace psf\core;
 
 /**
  * パスインフォとそれに対応するルール(呼び出すコントローラ、アクション)を定義するcoreクラス
@@ -8,7 +8,7 @@ namespace core;
  * '/user/:id/edit' => array('controller' => 'user', 'action' => 'edit') という対応の場合、
  * '/user/:id/edit' は $path_info に, array('controller' => 'user', ...) は $routing_params に格納される
  *
- * @package core
+ * @package psf\core
  */
 class Route
 {

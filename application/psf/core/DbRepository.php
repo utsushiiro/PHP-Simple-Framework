@@ -1,11 +1,11 @@
 <?php
 
-namespace core;
+namespace psf\core;
 
 /**
  * データベースとの特定の１つのコネクションを管理するcoreクラス
  *
- * @package core
+ * @package psf\core
  */
 abstract class DbRepository
 {

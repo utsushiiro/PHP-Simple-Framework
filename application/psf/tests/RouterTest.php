@@ -1,23 +1,23 @@
 <?php
 
-require_once "../bootstrap.php";
+require_once "../../bootstrap.php";
 
-$router = new \core\Router();
+$router = new \psf\core\Router();
 
 // ルーティングパラメタのindexについて、主要なもの(コントローラ等)は
 // 文字列ではなく定数(等)で指定できるようにすべきかも
-$route1 = new \core\Route(
+$route1 = new \psf\core\Route(
     '/',
     array('controller' => 'home', 'action' => 'index')
 );
-$route2 = new \core\Route(
+$route2 = new \psf\core\Route(
     '/user/:id/edit',
     array(
         'controller' => 'user',
         'action' => 'edit'
     )
 );
-$route3 = new \core\Route(
+$route3 = new \psf\core\Route(
     '/',
     array('controller' => 'foo', 'action' => 'bar')
 );
@@ -44,7 +44,7 @@ var_dump($routing_params);
 
 // $route4のresolve()の動作確認
 echo '----- $route4のresolve() ------', PHP_EOL;
-$route4 = new \core\Route(
+$route4 = new \psf\core\Route(
     '/user/:id/edit/:article',
     array(
         'controller' => 'user',

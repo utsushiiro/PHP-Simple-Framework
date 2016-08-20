@@ -1,14 +1,14 @@
 <?php
 
-namespace core;
+namespace psf\core;
 
-use core\exceptions\ClassNotFoundException;
-use core\exceptions\RouteNotFoundException;
+use psf\core\exceptions\ClassNotFoundException;
+use psf\core\exceptions\RouteNotFoundException;
 
 /**
  * アプリケーション全体の流れを制御するcoreクラス
  *
- * @package core
+ * @package psf\core
  */
 abstract class Application
 {

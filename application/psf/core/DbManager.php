@@ -1,11 +1,11 @@
 <?php
 
-namespace core;
+namespace psf\core;
 
 /**
  * データベースとのコネクション群を管理するcoreクラス
  *
- * @package core
+ * @package psf\core
  */
 class DbManager
 {
@@ -33,7 +33,7 @@ class DbManager
      *
      * レポジトリ名 => レポジトリオブジェクト の連想配列
      *
-     * @var \core\DbRepository[]
+     * @var DbRepository[]
      */
     private $repositories;
 

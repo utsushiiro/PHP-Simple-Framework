@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace psf\core;
 
 /**
  * セッションを管理するcoreクラス
@@ -10,7 +10,7 @@ namespace core;
  *
  * TODO: 認証を担当するクラスを作成して認証処理をそちらに移す
  *
- * @package core
+ * @package psf\core
  */
 class Session
 {

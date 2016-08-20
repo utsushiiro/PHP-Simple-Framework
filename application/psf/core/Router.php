@@ -1,12 +1,12 @@
 <?php
 
-namespace core;
-use core\exceptions\RouteNotFoundException;
+namespace psf\core;
+use psf\core\exceptions\RouteNotFoundException;
 
 /**
  * ルーティングを制御するcoreクラス
  *
- * @package core
+ * @package psf\core
  */
 class Router
 {

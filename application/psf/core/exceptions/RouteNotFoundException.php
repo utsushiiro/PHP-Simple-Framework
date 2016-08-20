@@ -1,11 +1,11 @@
 <?php
 
-namespace core\exceptions;
+namespace psf\core\exceptions;
 
 /**
  * 一致するRouteがなかった場合に発生する例外
  *
- * @package core\exceptions
+ * @package psf\core\exceptions
  */
 class RouteNotFoundException extends \Exception
 {
