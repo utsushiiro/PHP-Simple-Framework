@@ -134,10 +134,8 @@ abstract class Controller
      */
     protected function forward404()
     {
-        throw new HttpNotFoundException(
-            'Forwarded 404 page from ' .
-            $this->controller_name . '/' . ($this->action_name ?? '_undefined_')
-        );
+        $url = $this->controller_name . '/' . ($this->action_name ?? '_undefined_');
+        throw new HttpNotFoundException('Forwarded 404 page from ' . $url);
     }
 
     /**

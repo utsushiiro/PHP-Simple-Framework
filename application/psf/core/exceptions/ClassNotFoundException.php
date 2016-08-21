@@ -7,21 +7,18 @@ namespace psf\core\exceptions;
  *
  * @package psf\core\exceptions
  */
-class ClassNotFoundException extends \Exception
+class ClassNotFoundException extends ResourceNotFoundException
 {
-    private $class_name;
-
-    public function __construct($file_name, $message, $code = 0, \Exception $previous = null)
+    public function __construct($class_name, $message, $code = 0, \Exception $previous = null)
     {
-        parent::__construct($message, $code, $previous);
-        $this->class_name = $file_name;
+        parent::__construct($class_name ,$message, $code, $previous);
     }
 
     /**
      * @return string
      */
-    public function getClassName(): string
+    public function getClassName()
     {
-        return $this->class_name;
+        return $this->resource_name;
     }
 }

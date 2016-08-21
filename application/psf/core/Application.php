@@ -2,8 +2,8 @@
 
 namespace psf\core;
 
-use psf\core\exceptions\ClassNotFoundException;
 use psf\core\exceptions\HttpNotFoundException;
+use psf\core\exceptions\ResourceNotFoundException;
 use psf\core\exceptions\RouteNotFoundException;
 
 /**
@@ -126,6 +126,8 @@ abstract class Application
             $this->dispatchController($controller_name, $action_name, $routing_params);
         } catch (HttpNotFoundException $e) {
             $this->render404page($e);
+        } catch (ResourceNotFoundException $e){
+            $this->render500page($e);
         }
 
         $this->response->send();
@@ -143,13 +145,7 @@ abstract class Application
     {
         // 指定されたコントローラのインスタンス化を行う
         $controller_class_name = ucfirst($controller_name) . 'Controller';
-        $controller = null;
-        try {
-            $controller = new $controller_class_name($this);
-        }catch (ClassNotFoundException $e){
-            $class_name = $e->getClassName();
-            throw new HttpNotFoundException("Controller '$class_name' not found.");
-        }
+        $controller = new $controller_class_name($this);
 
         // 指定されたアクションを呼び出して結果をレスポンスに設定する
         $content = $controller->dispatchAction($action_name, $params);
@@ -166,6 +162,19 @@ abstract class Application
     {
         $this->response->setStatusCode(404, 'Not Found');
         $message = $this->isDebugMode() ? $e->getMessage() : 'Page not found.';
+        $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+        $this->response->setContent($message);
+    }
+
+    /**
+     * 500 Internal Server Error ページを返す
+     *
+     * @param \Exception $e
+     */
+    protected function render500page(\Exception $e)
+    {
+        $this->response->setStatusCode(500, 'Internal Server Error');
+        $message = $this->isDebugMode() ? $e->getMessage() : 'Internal Server Error.';
         $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
         $this->response->setContent($message);
     }
