@@ -5,6 +5,7 @@ require_once 'psf/core/ClassLoader.php';
 $loader = new \psf\core\ClassLoader();
 $loader->addFrameworkNameSpace('psf\\core');
 $loader->addFrameworkNameSpace('psf\\core\\exceptions');
+$loader->addFrameworkNameSpace('psf\\lib');
 $loader->addFrameworkNameSpace('app\\controller');
 $loader->addFrameworkNameSpace('app\\model');
 

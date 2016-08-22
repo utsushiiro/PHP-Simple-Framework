@@ -30,16 +30,6 @@ class Session
     }
 
     /**
-     * Session destructor
-     *
-     * Sessionオブジェクト破棄時にセッションも破棄する。
-     */
-    function __destruct()
-    {
-        $this->destroy();
-    }
-
-    /**
      * Sessionオブジェクトを返す
      *
      * Sessionオブジェクトがまだ作成されていない場合は、作成した後これを返す。
@@ -58,10 +48,10 @@ class Session
 
     /**
      * @param string $name
-     * @param null $default
-     * @return string
+     * @param mixed $default
+     * @return mixed
      */
-    public function getValue(string $name, $default = null) : string
+    public function getValue(string $name, $default = null)
     {
         if (isset($_SESSION[$name])):
             return $_SESSION[$name];
