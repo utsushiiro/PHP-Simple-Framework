@@ -95,7 +95,12 @@ class DbManager
             $params['options']
         );
 
+        // エラー処理を例外で行う
         $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+        // 静的プレースホルダを利用
+        $connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+
         $this->connections[$con_name] = $connection;
     }
 
