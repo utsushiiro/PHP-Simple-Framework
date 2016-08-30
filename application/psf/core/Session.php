@@ -37,7 +37,7 @@ class Session
      *
      * @return Session
      */
-    public static function getInstance()
+    public static function getInstance(): Session
     {
         if (self::$instance === null):
             self::$instance = new Session();
@@ -94,27 +94,6 @@ class Session
     {
         $_SESSION = [];
         session_destroy();
-    }
-
-    /**
-     * 認証状態を$statusに変更後、新たなセッションIDを発行し乗り換える
-     *
-     * @param bool $status 認証状態
-     */
-    public function setAuthenticated(bool $status)
-    {
-        $this->setValue('_authenticated', $status);
-        session_regenerate_id(true);
-    }
-
-    /**
-     * 現在の認証状態を返す
-     *
-     * @return string
-     */
-    public function isAuthenticated()
-    {
-        return $this->getValue('_authenticated', false);
     }
 
     /**

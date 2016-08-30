@@ -31,6 +31,20 @@ class Security
     const CSRF_ERROR_NUM = 100;
 
     /**
+     * パスワードのハッシュ化の際に付加するソルトの元
+     *
+     * アプリケーション毎に変更する
+     */
+    const FIXED_SALT_FOR_PASSWORD = '8602d2810bd6a2d8d419579f6ddd7ea37bc39f38';
+
+    /**
+     * パスワードハッシュ化の際のストレッチング回数
+     *
+     * アプリケーションのパフォーマンス(サーバ負荷)に合わせて調整する
+     */
+    const STRETCH_NUM = 1000;
+
+    /**
      * CSRFトークンを作成して返す
      *
      * @param string $form_name トークンを利用するフォーム名
@@ -147,4 +161,22 @@ class Security
             $string);
     }
 
+    /**
+     * $unique_key に対応する $password のハッシュ化を行う
+     *
+     * @param string $unique_key
+     * @param string $password
+     * @return string
+     */
+    public static function getPasswordHash(string $unique_key, string $password): string
+    {
+        $salt = $unique_key . pack('H*', self::FIXED_SALT_FOR_PASSWORD);
+
+        $hashed_password = '';
+        for ($i = 0; $i < self::STRETCH_NUM; $i++):
+            $hashed_password = hash(self::HASH_ALGORITHM, $hashed_password . $password . $salt);
+        endfor;
+
+        return $hashed_password;
+    }
 }
