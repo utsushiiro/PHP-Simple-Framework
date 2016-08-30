@@ -2,6 +2,7 @@
 
 namespace psf\core;
 use psf\core\exceptions\HttpNotFoundException;
+use psf\lib\Auth;
 
 /**
  * ユーザ定義の各種コントローラの基底となるcoreクラス
@@ -51,6 +52,11 @@ abstract class Controller
     protected $db_manager;
 
     /**
+     * @var Auth
+     */
+    protected $auth;
+
+    /**
      * Controller constructor.
      * @param Application $application
      */
@@ -62,6 +68,7 @@ abstract class Controller
         $this->response = $application->getResponse();
         $this->session = $application->getSession();
         $this->db_manager = $application->getDbManager();
+        $this->auth = new Auth($this->session);
     }
 
     /**
@@ -70,18 +77,22 @@ abstract class Controller
      * @param string $action_name 呼び出すアクション名
      * @param array $params アクションに渡すパラメータ
      * @return string アクションの実行結果
+     * @throws UnauthorizedActionException
      */
     public function dispatchAction(string $action_name, array $params = []): string
     {
         $this->action_name = $action_name;
         $action_method_name = $action_name . 'Action';
 
-        $content = '';
-        if (method_exists($this, $action_method_name)):
-            $content = $this->$action_method_name($params);
-        else:
+        if (!method_exists($this, $action_method_name)):
             $this->forward404();
         endif;
+
+        if ($this->auth->needsAuthentication($action_name) && !$this->auth->isAuthenticated()):
+            throw new UnauthorizedActionException();
+        endif;
+
+        $content = $this->$action_method_name($params);
 
         unset($this->action_name);
         return $content;

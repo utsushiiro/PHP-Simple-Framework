@@ -5,6 +5,7 @@ namespace psf\core;
 use psf\core\exceptions\HttpNotFoundException;
 use psf\core\exceptions\ResourceNotFoundException;
 use psf\core\exceptions\RouteNotFoundException;
+use psf\lib\Auth;
 
 /**
  * アプリケーション全体の流れを制御するcoreクラス
@@ -128,6 +129,11 @@ abstract class Application
             $this->render404page($e);
         } catch (ResourceNotFoundException $e){
             $this->render500page($e);
+        } catch (UnauthorizedActionException $e){
+            $this->dispatchController(
+                Auth::getLoginControllerName(),
+                Auth::getLoginActionName()
+            );
         }
 
         $this->response->send();

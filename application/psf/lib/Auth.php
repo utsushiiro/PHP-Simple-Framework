@@ -27,21 +27,21 @@ class Auth
      *
      * @var bool
      */
-    private $auth_all_actions;
+    private $auth_all_actions = false;
 
     /**
      * ログイン処理を行うコントローラ
      *
      * @var string
      */
-    private $login_controller_name;
+    private static $login_controller_name = '';
 
     /**
      * ログイン処理を行うアクション
      *
      * @var string
      */
-    private $login_action_name;
+    private static $login_action_name = '';
 
     /**
      * Auth constructor.
@@ -113,14 +113,38 @@ class Auth
     }
 
     /**
-     * ログイン処理を行うコントローラとアクションを設定する
-     *
-     * @param string $controller_name
-     * @param string $action_name
+     * @return string ログイン処理を行うコントローラ
      */
-    public function setLoginAction(string $controller_name, string $action_name)
+    public static function getLoginControllerName(): string
     {
-        $this->login_controller_name = $controller_name;
-        $this->login_action_name = $action_name;
+        return self::$login_controller_name;
+    }
+
+    /**
+     * ログイン処理を行うコントローラを設定する
+     *
+     * @param string $login_controller_name
+     */
+    public static function setLoginControllerName(string $login_controller_name)
+    {
+        self::$login_controller_name = $login_controller_name;
+    }
+
+    /**
+     * @return string ログイン処理を行うアクション
+     */
+    public static function getLoginActionName(): string
+    {
+        return self::$login_action_name;
+    }
+
+    /**
+     * ログイン処理を行うアクションを設定する
+     *
+     * @param string $login_action_name
+     */
+    public static function setLoginActionName(string $login_action_name)
+    {
+        self::$login_action_name = $login_action_name;
     }
 }
