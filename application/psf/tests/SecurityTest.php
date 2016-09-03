@@ -5,6 +5,7 @@ use psf\lib\Security;
 require_once '../bootstrap.php';
 
 $form_name = 'test';
+$password = 'test';
 
 $request = new \psf\core\Request();
 $result_message = null;
@@ -24,6 +25,14 @@ if ($request->isPost()):
     else:
         $result_message .= ' , Invalid Referer';
     endif;
+
+    // パスワードのテスト
+    $hashed_password = Security::getPasswordHash('unique_key', 'test');
+    if ($hashed_password ===  Security::getPasswordHash('unique_key', $request->getPostParam('password'))):
+        $auth_message = 'Success';
+    else:
+        $auth_message = 'Failed';
+    endif;
 else:
     $csrf_token = Security::generateOneTimeCsrfToken($form_name);
 endif;
@@ -41,18 +50,20 @@ $escaped_eha = Security::escapeJsString($event_handler_attack);
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>せきゅりてぃ〜</title>
+	<title>SecurityTest</title>
 	<link rel="stylesheet" href="">
 </head>
 <body onload="alert('<?= $escaped_eha;?>')">
-  <h1>てーすと</h1>
   <form action="./SecurityTest.php" method="post" id="<?= $form_name?>">
       <p>
-          <input type="submit" value="そーしん">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password">
+          <input type="submit" value="submit">
           <input type="hidden" name="token" value="<?= $csrf_token ?? '_undefined'?>">
       </p>
       <p>Result : <?= $result_message ?? ''?></p>
       <p>送信されたトークン : <?= $posted_token ?? ''?></p>
+      <p>Authentication : <?= $auth_message ?? '';?></p>
   </form>
   <script>
       alert('<?= $escaped_sta;?>');

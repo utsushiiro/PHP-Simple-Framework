@@ -2,6 +2,7 @@
 
 namespace psf\lib;
 
+use psf\core\ConfigLoader;
 use psf\core\Request;
 use psf\core\Session;
 
@@ -9,41 +10,11 @@ use psf\core\Session;
  * セキュリティ対策用関数を定義するlibクラス
  *
  * TODO: CSRFトークンについてワンタイムか固定かを選べるように(現状ワンタイムのみ) 実装を選べるようにStrategyで
- * TODO: 定数類をConfig.php実装後、configで定めるように
  *
  * @package psf\lib
  */
 class Security
 {
-    /**
-     * 使用するハッシュアルゴリズム
-     */
-    const HASH_ALGORITHM = 'sha256';
-
-    /**
-     * 同一セッションからの最大同時フォーム利用数
-     */
-    const MAX_TOKEN_NUM = 10;
-
-    /**
-     * CSRFのエラーコード
-     */
-    const CSRF_ERROR_NUM = 100;
-
-    /**
-     * パスワードのハッシュ化の際に付加するソルトの元
-     *
-     * アプリケーション毎に変更する
-     */
-    const FIXED_SALT_FOR_PASSWORD = '8602d2810bd6a2d8d419579f6ddd7ea37bc39f38';
-
-    /**
-     * パスワードハッシュ化の際のストレッチング回数
-     *
-     * アプリケーションのパフォーマンス(サーバ負荷)に合わせて調整する
-     */
-    const STRETCH_NUM = 1000;
-
     /**
      * CSRFトークンを作成して返す
      *
@@ -56,11 +27,13 @@ class Security
         $key = 'csrf_tokens/' . $form_name;
         $tokens = $session->getValue($key, []);
 
-        if (count($tokens) >= self::MAX_TOKEN_NUM):
+        $max_token_num = ConfigLoader::get('SECURITY','MAX_SAME_SESS_CON');
+        if (count($tokens) >= $max_token_num):
             array_shift($tokens);
         endif;
 
-        $token = hash(self::HASH_ALGORITHM, uniqid(mt_rand(),true));
+        $hash_algorithm = ConfigLoader::get('SECURITY', 'HASH_ALGORITHM');
+        $token = hash($hash_algorithm, uniqid(mt_rand(),true));
         $tokens[] = $token;
 
         $session->setValue($key, $tokens);
@@ -85,7 +58,7 @@ class Security
             unset($tokens[$index]);
             $session->setValue($key, $tokens);
         else:
-            throw new \RuntimeException('CSRF validation failed', self::CSRF_ERROR_NUM);
+            throw new \RuntimeException('CSRF validation failed');
         endif;
     }
 
@@ -170,11 +143,14 @@ class Security
      */
     public static function getPasswordHash(string $unique_key, string $password): string
     {
-        $salt = $unique_key . pack('H*', self::FIXED_SALT_FOR_PASSWORD);
+        $fixed_salt = ConfigLoader::get('SECURITY', 'FIXED_SALT_FOR_PASSWORD');
+        $salt = $unique_key . pack('H*', $fixed_salt);
 
         $hashed_password = '';
-        for ($i = 0; $i < self::STRETCH_NUM; $i++):
-            $hashed_password = hash(self::HASH_ALGORITHM, $hashed_password . $password . $salt);
+        $stretch_num = ConfigLoader::get('SECURITY', 'STRETCH_NUM');
+        $hash_algorithm = ConfigLoader::get('SECURITY', 'HASH_ALGORITHM');
+        for ($i = 0; $i < $stretch_num; $i++):
+            $hashed_password = hash($hash_algorithm, $hashed_password . $password . $salt);
         endfor;
 
         return $hashed_password;

@@ -18,13 +18,6 @@ use psf\lib\Auth;
 abstract class Application
 {
     /**
-     * デバックモードのOn/Off
-     *
-     * @var bool
-     */
-    protected $debug;
-
-    /**
      * @var Request
      */
     protected $request;
@@ -51,28 +44,24 @@ abstract class Application
 
     /**
      * Application constructor.
-     * @param bool $debug
      */
-    public function __construct(bool $debug)
+    public function __construct()
     {
-        $this->setDebugMode($debug);
+        $this->setDebugMode();
         $this->initialize();
         $this->configure();
     }
 
     /**
      * デバックモードの設定を行う
-     *
-     * @param bool $debug
      */
-    protected function setDebugMode(bool $debug)
+    protected function setDebugMode()
     {
+        $debug = ConfigLoader::get('CORE','DEBUG_MODE');
         if ($debug):
-            $this->debug = true;
             ini_set('display_errors', 1);
             error_reporting(-1);
         else:
-            $this->debug = false;
             ini_set('display_errors', 0);
         endif;
     }
@@ -190,7 +179,7 @@ abstract class Application
      */
     public function isDebugMode(): bool
     {
-        return $this->debug;
+        return ConfigLoader::get('CORE', 'DEBUG_MODE');
     }
 
     /**
