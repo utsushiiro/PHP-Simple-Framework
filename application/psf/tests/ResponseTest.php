@@ -1,6 +1,6 @@
 <?php
 
-require_once "../../bootstrap.php";
+require_once "../bootstrap.php";
 
 // Chrome Developer Tools の Networkタブを選択後リロードして
 // Name欄からこのファイルを選択すればHTTP Headerは確認できる

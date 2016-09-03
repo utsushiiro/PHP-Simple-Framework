@@ -1,5 +1,9 @@
 <?php
-require_once 'psf/core/ClassLoader.php';
+require_once 'core/ConfigLoader.php';
+require_once 'core/ClassLoader.php';
+
+// 設定ファイルのロード
+(new \psf\core\ConfigLoader())->run();
 
 // 名前空間の設定
 $loader = new \psf\core\ClassLoader();

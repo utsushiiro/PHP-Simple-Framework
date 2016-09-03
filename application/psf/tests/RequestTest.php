@@ -1,6 +1,6 @@
 <?php
 
-require_once "../../bootstrap.php";
+require_once "../bootstrap.php";
 
 $obj = new \psf\core\Request();
 ?>

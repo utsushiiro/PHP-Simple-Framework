@@ -2,7 +2,7 @@
 
 use psf\lib\Security;
 
-require_once '../../bootstrap.php';
+require_once '../bootstrap.php';
 
 $form_name = 'test';
 
