@@ -16,7 +16,6 @@ class ClassLoader
      * フレームワークのルートディレクトリ
      *
      * @var string
-     * TODO: これは後に定数設定用のファイルに移す(定数として)
      */
     private $framework_root_dir;
 

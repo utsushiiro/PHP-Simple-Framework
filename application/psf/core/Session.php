@@ -8,8 +8,6 @@ namespace psf\core;
  * このクラスは一回のリクエストに一度だけインスタンス化される。<br>
  * セッションは最初に{@link Session::getInstance}を呼び出した時点で開始される。
  *
- * TODO: 認証を担当するクラスを作成して認証処理をそちらに移す
- *
  * @package psf\core
  */
 class Session

@@ -65,7 +65,6 @@ class View
         $this->layout_default_vars[$name] = $value;
     }
 
-
     /**
      * 指定されたviewファイルを実行してその結果を文字列として返す
      *
