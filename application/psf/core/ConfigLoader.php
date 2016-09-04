@@ -51,6 +51,7 @@ class ConfigLoader
     {
         if (self::$config === false):
             self::$config = $this->loadConfigs();
+            $this->addCoreInfo2Config();
 
             if (self::$config['CORE']['EXPAND_CONFIGS_TO_CONSTANTS']):
                 $this->expandConfigs2Constants(self::$config);
@@ -116,6 +117,17 @@ class ConfigLoader
                 define('PSF_' . $section_name . '_' . $name, $value);
             endforeach;
         endforeach;
+    }
+
+    /**
+     * 幾つかの定数値をconfigのCOREセクションに追加する
+     *
+     * 環境によって値が変わる設定項目のconfigへの追加処理用
+     */
+    private function addCoreInfo2Config()
+    {
+        self::$config['CORE']['FRAMEWORK_ROOT_DIR'] = dirname(__FILE__, 3);
+        self::$config['CORE']['CONFIG_ROOT'] = $this->CONFIG_ROOT;
     }
 
     /**

@@ -11,14 +11,6 @@ use psf\core\exceptions\ClassNotFoundException;
  */
 class ClassLoader
 {
-
-    /**
-     * フレームワークのルートディレクトリ
-     *
-     * @var string
-     */
-    private $framework_root_dir;
-
     /**
      * 名前空間と名前空間に対応するディレクトリまでのパスの対応関係<br>
      *
@@ -34,7 +26,6 @@ class ClassLoader
     {
         spl_autoload_register(array($this, 'loadQualifiedClass'));
         $this->ns2paths = [];
-        $this->framework_root_dir = dirname(__DIR__, 2);
     }
 
     /**
@@ -57,7 +48,7 @@ class ClassLoader
      */
     public function addFrameworkNameSpace(string $namespace)
     {
-        $this->addNameSpace($namespace, $this->framework_root_dir);
+        $this->addNameSpace($namespace, ConfigLoader::get('CORE', 'FRAMEWORK_ROOT_DIR'));
     }
 
     /**
