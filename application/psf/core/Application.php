@@ -84,7 +84,7 @@ abstract class Application
         $this->response = new Response();
         $this->session = Session::getInstance();
         $this->db_manager = new DbManager();
-        $this->router = new Router();
+        $this->router = RouteLoader::getRouter();
     }
 
     /**

@@ -100,7 +100,7 @@ class Router
 
             // 分離したトークンを再結合する
             // PCRE正規表現を使用するため'#'で囲む
-            $pattern = "#^". implode('/', $tokens) . '$#';
+            $pattern = '#\A'. implode('/', $tokens) . '\z#u';
             $this->compiled_routes[$pattern] = $routing_param;
         endforeach;
     }
