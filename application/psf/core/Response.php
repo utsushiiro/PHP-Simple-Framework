@@ -28,7 +28,7 @@ class Response
      * HTTPヘッダを格納する連想配列
      * @var string[]
      */
-    private $http_header;
+    private $http_header = [];
 
     /**
      * HTTPヘッダを設定し、レスポンスを送信する

@@ -101,24 +101,31 @@ abstract class Application
      */
     public function run()
     {
-        $routing_params = null;
-        try{
+        try
+        {
+            // ルーティングパラメタを取得
             $path_info = $this->request->getPathInfo();
             $routing_params = $this->router->resolve($path_info);
-        }catch (RouteNotFoundException $e){
+
+            // コントローラ・アクション名を取得して呼び出す
+            $controller_name = $routing_params['controller'] ?? '';
+            $action_name = $routing_params['action'] ?? '';
+            $this->dispatchController($controller_name, $action_name, $routing_params);
+        }
+        catch (RouteNotFoundException $e)
+        {
             $this->render404page($e);
         }
-
-        $controller_name = $routing_params['controller'] ?? '';
-        $action_name = $routing_params['action'] ?? '';
-
-        try {
-            $this->dispatchController($controller_name, $action_name, $routing_params);
-        } catch (HttpNotFoundException $e) {
+        catch (HttpNotFoundException $e)
+        {
             $this->render404page($e);
-        } catch (ResourceNotFoundException $e){
+        }
+        catch (ResourceNotFoundException $e)
+        {
             $this->render500page($e);
-        } catch (UnauthorizedActionException $e){
+        }
+        catch (UnauthorizedActionException $e)
+        {
             $this->dispatchController(
                 Auth::getLoginControllerName(),
                 Auth::getLoginActionName()

@@ -11,11 +11,14 @@ $request = new \psf\core\Request();
 $result_message = null;
 if ($request->isPost()):
     // CSRF対策トークンのテスト
-    try {
+    try
+    {
         $posted_token =  $request->getPostParam('token');
         Security::checkOneTimeCsrfToken($form_name, $posted_token);
         $result_message = 'Valid Request';
-    }catch (Exception $e){
+    }
+    catch (Exception $e)
+    {
         $result_message = $e->getMessage();
     }
 
