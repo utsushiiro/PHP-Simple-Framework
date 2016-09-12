@@ -153,7 +153,7 @@ abstract class Controller
     }
 
     /**
-     * $url にリダイレクトするようにレスポンスを設定する
+     * $url にリダイレクトする
      *
      * このアプリケーション内へのリダイレクトを行う場合、パスインフォ部のみを指定すればよい。
      *
@@ -170,5 +170,6 @@ abstract class Controller
 
         $this->response->setStatusCode('302', 'Found');
         $this->response->setHttpHeader('Location', $url);
+        $this->response->send();
     }
 }
