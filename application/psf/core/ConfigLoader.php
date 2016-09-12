@@ -126,8 +126,15 @@ class ConfigLoader
      */
     private function addCoreInfo2Config()
     {
-        self::$config['CORE']['FRAMEWORK_ROOT_DIR'] = dirname(__FILE__, 3);
-        self::$config['CORE']['CONFIG_ROOT'] = $this->CONFIG_ROOT;
+        $framework_root_dir = dirname(__FILE__, 3);
+        self::$config['CORE']['FRAMEWORK_ROOT_DIR'] = $framework_root_dir;
+        self::$config['CORE']['CONFIGS_ROOT'] = $this->CONFIG_ROOT;
+        self::$config['CORE']['CONTROLLERS_ROOT'] =
+            $framework_root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'controllers';
+        self::$config['CORE']['MODELS_ROOT'] =
+            $framework_root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'models';
+        self::$config['CORE']['VIEWS_ROOT'] =
+            $framework_root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'views';
     }
 
     /**
