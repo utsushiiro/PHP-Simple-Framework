@@ -161,7 +161,7 @@ class DbManager
     public function getRepo(string $repo_name)
     {
         if (!isset($this->repositories[$repo_name])):
-            $repo_class_name = $repo_name . '.' . 'Repository';
+            $repo_class_name = 'app\\models\\' . $repo_name . 'Repository';
             $connection = $this->getConnectionForRepo($repo_name);
 
             $repository = new $repo_class_name($connection);

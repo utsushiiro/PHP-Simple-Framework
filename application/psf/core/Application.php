@@ -146,7 +146,7 @@ abstract class Application
     public function dispatchController(string $controller_name, string $action_name, $params = [])
     {
         // 指定されたコントローラのインスタンス化を行う
-        $controller_class_name = ucfirst($controller_name) . 'Controller';
+        $controller_class_name = 'app\\controllers\\' . ucfirst($controller_name) . 'Controller';
         $controller = new $controller_class_name($this);
 
         // 指定されたアクションを呼び出して結果をレスポンスに設定する
