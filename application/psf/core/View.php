@@ -45,11 +45,10 @@ class View
     /**
      * View constructor.
      * @param array $view_default_vars
-     * @param string $views_dir
      */
-    public function __construct($view_default_vars = [], $views_dir='../../app/views')
+    public function __construct($view_default_vars = [])
     {
-        $this->views_dir = $views_dir;
+        $this->views_dir = ConfigLoader::get('CORE', 'VIEWS_ROOT');
         $this->view_default_vars = $view_default_vars;
         $this->layout_default_vars = [];
     }
@@ -60,7 +59,7 @@ class View
      * @param string $name
      * @param mixed $value
      */
-    public function setLayoutVariable(string $name, mixed $value)
+    public function setLayoutVariable(string $name, $value)
     {
         $this->layout_default_vars[$name] = $value;
     }
@@ -79,8 +78,9 @@ class View
         $view_vars = array_merge($this->view_default_vars, $view_vars);
         $content = $this->execute($view_file, $view_vars);
 
-        $layout_file = $this->views_dir . DIRECTORY_SEPARATOR . $layout_file_path . 'php';
+        $layout_file = $this->views_dir . DIRECTORY_SEPARATOR . $layout_file_path . '.php';
         $layout_vars = array_merge($this->layout_default_vars, ['_content' => $content]);
+        $layout_vars = array_merge($layout_vars, $view_vars);
         $content = $this->execute($layout_file, $layout_vars);
 
         return $content;
@@ -110,7 +110,7 @@ class View
 
         require $file;
 
-        $content = ob_get_contents();
+        $content = ob_get_clean();
 
         return $content;
     }
