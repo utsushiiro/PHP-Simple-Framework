@@ -25,7 +25,7 @@ class DbManager
      *
      * @var
      */
-    private $repo2cons;
+    private $repository_name2connection_name_map;
 
 
     /**
@@ -44,7 +44,7 @@ class DbManager
     public function __construct()
     {
         $this->connections = [];
-        $this->repo2cons = [];
+        $this->repository_name2connection_name_map = [];
         $this->repositories = [];
     }
 
@@ -107,17 +107,16 @@ class DbManager
     /**
      * コネクション名から対応するコネクション(PDOオブジェクト)を習得する
      *
-     * TODO: 存在しない名前を指定されたときに例外を吐くようにする
-     *
      * @param string $con_name
      * @return \PDO
      */
     public function getConnection(string $con_name) : \PDO
     {
-        if (is_null($con_name)):
-            return current($this->connections);
+        if (!isset($this->connections[$con_name])):
+            throw new \RuntimeException("There is no connection named $con_name");
         endif;
-        return null;
+
+        return $this->connections[$con_name];
     }
 
     /**
@@ -126,25 +125,26 @@ class DbManager
      * @param string $repo_name レポジトリ名
      * @param string $con_name コネクション名
      */
-    public function setRepo2con(string $repo_name, string $con_name)
+    public function linkRepositoryName2ConnectionName(string $repo_name, string $con_name)
     {
-        $this->repo2cons[$repo_name] = $con_name;
+        $this->repository_name2connection_name_map[$repo_name] = $con_name;
     }
 
     /**
      * レポジトリ名から対応するコネクション(PDOオブジェクト)を習得する
      *
      * @param string $repo_name
-     * @return null|\PDO
+     * @return \PDO
      */
-    public function getConnectionForRepo(string $repo_name)
+    public function getConnectionForRepositoryName(string $repo_name)
     {
-        $connection = null;
-        if (isset($this->repo2cons[$repo_name])):
-            $con_name = $this->getConnection($repo_name);
-            $connection = $this->getConnection($con_name);
+        if (!isset($this->repository_name2connection_name_map[$repo_name])):
+            throw new \RuntimeException("There is no connection related to $repo_name");
         endif;
-        return $connection;
+
+        $con_name = $this->repository_name2connection_name_map[$repo_name];
+
+        return $this->getConnection($con_name);
     }
 
     /**
@@ -158,14 +158,11 @@ class DbManager
      * @param $repo_name string レポジトリ名
      * @return DbRepository 対応するレポジトリオブジェクト
      */
-    public function getRepo(string $repo_name)
+    public function getRepository(string $repo_name)
     {
         if (!isset($this->repositories[$repo_name])):
             $repo_class_name = 'app\\models\\' . $repo_name . 'Repository';
-            $connection = $this->getConnectionForRepo($repo_name);
-
-            $repository = new $repo_class_name($connection);
-
+            $repository = new $repo_class_name($this->getConnectionForRepositoryName($repo_name));
             $this->repositories[$repo_name] = $repository;
         endif;
 
