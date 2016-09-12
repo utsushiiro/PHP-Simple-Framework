@@ -96,7 +96,7 @@ class Request
     }
 
     /**
-     * ベースURIを取得する<br>
+     * ベースURIを取得する
      *
      * ベースURIはフロントコントローラに続くパスインフォを取り出すために使用される。
      * <pre>
@@ -106,6 +106,12 @@ class Request
      * 2: フロントコントローラが省略された場合
      *  "/some/where[/any] => /some/where"
      * </pre>
+     *
+     * 通常、dirname($script_name)はディレクトリ名を返すため、末尾に"/"が付くことはない。
+     * しかし、フロントコントローラ省略時に$script_nameの属するディレクトリがルート・ディレクトリの場合は"/"を返す。
+     * この場合もそれ以外の場合に合わせるため"/"が返されるときは空文字列を返すようにする。
+     * よって、ベースURIに対してパスインフォを付加してURIを作る際には、getBaseUri(). "/path/info" のように、
+     * 常にパスインフォの先頭に"/"をつける。
      *
      * @return string
      */
@@ -119,14 +125,15 @@ class Request
             return $script_name;
         elseif (0 === strpos($request_uri, dirname($script_name))):
             // 2: フロントコントローラが省略された場合
-            return rtrim(dirname($script_name), '/');
+            $dir_name = dirname($script_name);
+            return $dir_name === '/' ? '' : $dir_name;
         endif;
 
         return '';
     }
 
     /**
-     * パスインフォを取得する<br>
+     * パスインフォを取得する
      *
      * パスインフォはリクエストURIにおけるベースURIに続く部分である。
      * つまり、"/some/where[/FrontController][/path[/info[/...]]]"における、
