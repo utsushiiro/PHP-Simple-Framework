@@ -120,20 +120,20 @@ class ConfigLoader
     }
 
     /**
-     * 幾つかの定数値をconfigのCOREセクションに追加する
+     * 幾つかの定数値をconfigのPATHセクションに追加する
      *
      * 環境によって値が変わる設定項目のconfigへの追加処理用
      */
     private function addCoreInfo2Config()
     {
         $framework_root_dir = dirname(__FILE__, 3);
-        self::$config['CORE']['FRAMEWORK_ROOT_DIR'] = $framework_root_dir;
-        self::$config['CORE']['CONFIGS_ROOT'] = $this->CONFIG_ROOT;
-        self::$config['CORE']['CONTROLLERS_ROOT'] =
+        self::$config['PATH']['FRAMEWORK_ROOT'] = $framework_root_dir;
+        self::$config['PATH']['CONFIGS_ROOT'] = $this->CONFIG_ROOT;
+        self::$config['PATH']['CONTROLLERS_ROOT'] =
             $framework_root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'controllers';
-        self::$config['CORE']['MODELS_ROOT'] =
+        self::$config['PATH']['MODELS_ROOT'] =
             $framework_root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'models';
-        self::$config['CORE']['VIEWS_ROOT'] =
+        self::$config['PATH']['VIEWS_ROOT'] =
             $framework_root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'views';
     }
 

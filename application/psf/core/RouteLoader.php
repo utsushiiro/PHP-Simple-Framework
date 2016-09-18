@@ -15,7 +15,7 @@ class RouteLoader
      */
     public static function getRouter(): Router
     {
-        $routes_ini_filename = ConfigLoader::get('CORE', 'CONFIGS_ROOT') . DIRECTORY_SEPARATOR . 'routes.ini';
+        $routes_ini_filename = ConfigLoader::get('PATH', 'CONFIGS_ROOT') . DIRECTORY_SEPARATOR . 'routes.ini';
         $routes_ini = parse_ini_file($routes_ini_filename, true, INI_SCANNER_RAW);
 
         if ($routes_ini === false):

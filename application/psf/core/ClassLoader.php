@@ -48,7 +48,7 @@ class ClassLoader
      */
     public function addFrameworkNameSpace(string $namespace)
     {
-        $this->addNameSpace($namespace, ConfigLoader::get('CORE', 'FRAMEWORK_ROOT_DIR'));
+        $this->addNameSpace($namespace, ConfigLoader::get('PATH', 'FRAMEWORK_ROOT'));
     }
 
     /**
