@@ -89,7 +89,7 @@ class ConfigLoader
      */
     private function parseConfigFile(string $filename): array 
     {
-        $config = parse_ini_file($filename, true, INI_SCANNER_NORMAL);
+        $config = parse_ini_file($filename, true, INI_SCANNER_TYPED);
 
         if ($config === false):
             throw new \RuntimeException("Failed to parse ${filename}");

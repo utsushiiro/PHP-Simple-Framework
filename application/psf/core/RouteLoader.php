@@ -16,7 +16,7 @@ class RouteLoader
     public static function getRouter(): Router
     {
         $routes_ini_filename = ConfigLoader::get('PATH', 'CONFIGS_ROOT') . DIRECTORY_SEPARATOR . 'routes.ini';
-        $routes_ini = parse_ini_file($routes_ini_filename, true, INI_SCANNER_RAW);
+        $routes_ini = parse_ini_file($routes_ini_filename, true, INI_SCANNER_TYPED);
 
         if ($routes_ini === false):
             throw new \RuntimeException("Failed to parse ${routes_ini_filename}");
