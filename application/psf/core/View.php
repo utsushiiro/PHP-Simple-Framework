@@ -29,59 +29,125 @@ class View
     protected $views_dir;
 
     /**
+     * viewファイル名
+     *
+     * @var string
+     */
+    protected $view_file;
+
+    /**
      * viewファイルにデフォルトで渡す変数
      *
      * @var array
      */
-    protected $view_default_vars;
+    protected $default_vars;
 
     /**
-     * layoutファイルにデフォルトで渡す変数
+     * layoutファイルを利用するかどうか
+     *
+     * @var bool
+     */
+    protected $has_layout = false;
+
+    /**
+     * layoutファイル名
+     *
+     * @var string
+     */
+    protected $layout_file;
+
+    /**
+     * layoutファイルに渡す変数
      *
      * @var array
      */
-    protected $layout_default_vars;
+    protected $layout_vars;
+
 
     /**
      * View constructor.
-     * @param array $view_default_vars
+     *
+     * $pathには実行するviewファイルへのVIEWS_ROOTからのパスを指定する。
+     * このviewファイルの実行は {@link render} の呼び出しによって行われる。
+     *
+     * $default_varsに指定する連想配列は、このViewオブジェクトを通じて実行されるviewファイル
+     * ($pathに指定したviewファイル以外にlayoutファイルや {@link includeView} で実行するviewファイル)
+     * において変数として展開される。つまり、インデックス名を変数名として対応する値に変数としてアクセスできる。
+     * 例えば、["xxx" => 10] を指定した場合、各viewファイル内では $xxx で 10 にアクセスできる。
+     *
+     * @param string $path VIEWS_ROOTからのviewファイルまでのパス (ファイルの拡張子は含めない)
+     * @param array $default_vars viewファイルにデフォルトで渡す変数
      */
-    public function __construct($view_default_vars = [])
+    public function __construct(string $path, array $default_vars = [])
     {
-        $this->views_dir = ConfigLoader::get('CORE', 'VIEWS_ROOT');
-        $this->view_default_vars = $view_default_vars;
-        $this->layout_default_vars = [];
+        $this->views_dir = ConfigLoader::get('PATH', 'VIEWS_ROOT');
+        $this->view_file = $this->views_dir . DIRECTORY_SEPARATOR . $path . '.php';
+        $this->default_vars = $default_vars;
     }
 
     /**
-     * layoutファイルにデフォルトで渡す変数を追加する
+     * layoutファイルを指定する
      *
-     * @param string $name
-     * @param mixed $value
+     * @param string $path LAYOUTS_DIRからのlayoutファイルまでのパス (ファイルの拡張子は含めない)
      */
-    public function setLayoutVariable(string $name, $value)
+    public function setLayoutFile(string $path)
     {
-        $this->layout_default_vars[$name] = $value;
+        $layouts_dir = $this->views_dir . DIRECTORY_SEPARATOR . ConfigLoader::get('LAYOUT', 'LAYOUTS_DIR');
+        $this->layout_file = $layouts_dir . DIRECTORY_SEPARATOR . $path . '.php';
+
+        $this->has_layout = true;
+        $this->layout_vars = [];
     }
 
     /**
-     * 指定されたviewファイルを実行してその結果を文字列として返す
+     * layoutファイルに渡す変数を追加する
      *
-     * @param array $view_vars
-     * @param string $view_file_path
-     * @param string $layout_file_path
+     * @param string $name 変数名
+     * @param mixed $value 変数の値
+     */
+    public function addLayoutVar(string $name, $value)
+    {
+        if (!$this->has_layout):
+            throw new \RuntimeException("The layout file has not been set.");
+        endif;
+
+        $this->layout_vars[$name] = $value;
+    }
+
+    /**
+     * viewファイルを実行後、指定があればlayoutファイルを実行しその結果を返す
+     *
+     * @param array $view_vars viewファイルに渡す変数
      * @return string
      */
-    public function buildViewFile(array $view_vars, string $view_file_path, string $layout_file_path): string
+    function render(array $view_vars = []): string
     {
-        $view_file = $this->views_dir . DIRECTORY_SEPARATOR . $view_file_path . '.php';
-        $view_vars = array_merge($this->view_default_vars, $view_vars);
-        $content = $this->execute($view_file, $view_vars);
+        $view_vars = array_merge($this->default_vars, $view_vars);
+        $content = $this->execute($this->view_file, $view_vars);
 
-        $layout_file = $this->views_dir . DIRECTORY_SEPARATOR . $layout_file_path . '.php';
-        $layout_vars = array_merge($this->layout_default_vars, ['_content' => $content]);
-        $layout_vars = array_merge($layout_vars, $view_vars);
-        $content = $this->execute($layout_file, $layout_vars);
+        if ($this->has_layout):
+            $layout_vars = array_merge($this->layout_vars, ['_content' => $content]);
+            $layout_vars = array_merge($layout_vars, $this->default_vars);
+            $content = $this->execute($this->layout_file, $layout_vars);
+        endif;
+
+        return $content;
+    }
+
+    /**
+     * 指定されたviewファイルを実行し、結果を文字列として返す
+     *
+     * viewファイル内で他のviewファイルを実行するために使用する
+     *
+     * @param string $path VIEWS_ROOTからのviewファイルまでのパス
+     * @param array $view_vars viewファイルに渡す変数
+     * @return string
+     */
+    public function includeView(string $path, array $view_vars = [])
+    {
+        $view_file = $this->views_dir . DIRECTORY_SEPARATOR . $path . '.php';
+        $view_vars = array_merge($this->default_vars, $view_vars);
+        $content = $this->execute($view_file, $view_vars);
 
         return $content;
     }
@@ -97,7 +163,7 @@ class View
      * @return string
      * @throws FileNotFoundException
      */
-    private function execute(string $file, array $vars): string
+    protected function execute(string $file, array $vars): string
     {
         if (!(is_file($file) && is_readable($file))):
             throw new FileNotFoundException($file, "File '$file' not found");

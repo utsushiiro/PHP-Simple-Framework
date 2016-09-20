@@ -107,28 +107,34 @@ abstract class Controller
      * {@link View::buildViewFile} のラッパー
      *
      * @param array $view_vars
-     * @param string $view_file_name
-     * @param string $layout_file_path
+     * @param string $view_filename
+     * @param string $layout_filename
      * @return string
      */
-    protected function render(array $view_vars = [], string $view_file_name = '',
-                              string $layout_file_path='layout'): string
+    protected function render(array $view_vars = [], string $view_filename = '',
+                              string $layout_filename = ''): string
     {
-        $view_default_vars = [
+        $default_vars = [
             'request'  => $this->request,
             'base_url' => $this->request->getBaseUri(),
             'session'  => $this->session
         ];
 
-        $view = new View($view_default_vars);
-        
-        if ($view_file_name === ''):
-            $view_file_name = $this->action_name;
+        if ($view_filename === ''):
+            $view_filename = $this->action_name;
+        endif;
+        $view_path = $this->controller_name . DIRECTORY_SEPARATOR . $view_filename;
+
+        $view = new View($view_path, $default_vars);
+
+        if ($layout_filename !== ''):
+            $view->setLayoutFile($layout_filename);
+        elseif ($layout_filename === '' && ConfigLoader::get('LAYOUT', 'USE_DEFAULT_LAYOUT')):
+            $layout_filename = ConfigLoader::get('LAYOUT', 'DEFAULT_LAYOUT_FILENAME');
+            $view->setLayoutFile($layout_filename);
         endif;
 
-        $view_file_path = $this->controller_name . '/' . $view_file_name;
-
-        $content = $view->buildViewFile($view_vars, $view_file_path, $layout_file_path);
+        $content = $view->render($view_vars);
 
         return $content;
     }
