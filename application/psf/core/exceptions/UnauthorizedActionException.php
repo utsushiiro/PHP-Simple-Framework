@@ -1,6 +1,6 @@
 <?php
 
-namespace psf\core;
+namespace psf\core\exceptions;
 
 /**
  * 認可されていないアクションを実行しようとしたことを通知する

@@ -5,6 +5,7 @@ namespace psf\core;
 use psf\core\exceptions\HttpNotFoundException;
 use psf\core\exceptions\ResourceNotFoundException;
 use psf\core\exceptions\RouteNotFoundException;
+use psf\core\exceptions\UnauthorizedActionException;
 use psf\lib\Auth;
 
 /**

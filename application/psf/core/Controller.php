@@ -2,6 +2,7 @@
 
 namespace psf\core;
 use psf\core\exceptions\HttpNotFoundException;
+use psf\core\exceptions\UnauthorizedActionException;
 use psf\lib\Auth;
 
 /**
@@ -104,7 +105,7 @@ abstract class Controller
     /**
      * 指定されたviewファイルを実行してその結果を文字列として返す
      *
-     * {@link View::buildViewFile} のラッパー
+     * {@link View::render} のラッパー
      *
      * @param array $view_vars
      * @param string $view_filename
