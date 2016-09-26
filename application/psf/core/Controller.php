@@ -131,7 +131,8 @@ abstract class Controller
         $default_vars = [
             'request'  => $this->request,
             'base_url' => $this->request->getBaseUri(),
-            'session'  => $this->session
+            'session'  => $this->session,
+            'auth'     => $this->auth
         ];
 
         if ($view_filename === ''):
