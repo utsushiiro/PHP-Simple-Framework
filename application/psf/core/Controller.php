@@ -73,7 +73,20 @@ abstract class Controller
         $this->session = $application->getSession();
         $this->db_manager = $application->getDbManager();
         $this->auth = new Auth($this->session);
+
+        $this->configure();
     }
+
+    /**
+     * コントローラ初期化時に行う処理を記述する
+     *
+     * ユーザがControllerクラスをextendsして作成するコントローラにおいて、
+     * コントローラの初期化の際に必要な処理(認証が必要なアクションの登録等)があった場合、
+     * このメソッドをオーバーライドしてその処理を記述する。
+     *
+     * このメソッドは {@link Controller::__construct} の最後に呼ばれる。
+     */
+    public function configure(){}
 
     /**
      * アクションを呼び出してその結果を返す
